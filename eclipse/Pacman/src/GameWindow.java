@@ -1,7 +1,7 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,6 +16,8 @@ import javax.swing.JPanel;
  */
 public class GameWindow extends JFrame {
 	private static final long serialVersionUID = -5710795868465552255L;
+	boolean disposed = true;
+	GameMap map = new GameMap();
 
 	/**
 	 * @throws HeadlessException
@@ -31,17 +33,43 @@ public class GameWindow extends JFrame {
 	public GameWindow(String title){
 		super(title);
 		
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent we) {
+	            disposed = false;
+	         }
+		});
+		
 		
 		Dimension screenSize = getToolkit().getScreenSize();
-		if((double)screenSize.width/(double)screenSize.height >= 8.0d/6.0d) {
-			this.setSize(new Dimension(8*screenSize.height/9, 2*screenSize.height/3));
+		int width = screenSize.width;
+		int height = screenSize.height;
+		if((double)width/(double)height >= 8.0d/6.0d) {
+			width = 8*screenSize.height/9;
+			height = 2*screenSize.height/3;
 		} else {
-			this.setSize(new Dimension(screenSize.width/2, 3*screenSize.width/8));
+			height = 3*screenSize.width/8;
+			width = screenSize.width/2;
 		}
+		
+		int heightDif = -(height % 12);
+		int widthDif = (height + heightDif)*16/12 - width;
+		this.getContentPane().setPreferredSize(new Dimension(width+widthDif, height+heightDif));
+		this.pack();
+		
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		
+		
 		setContentPane(new GameScreen());
+		
+		
+		map.addWall(0, 0);
+		map.addWall(15, 11);
+		map.addWall(15, 0);
+		map.addWall(0, 11);
+		
 		
 		this.setVisible(true);
 	}
@@ -56,11 +84,11 @@ public class GameWindow extends JFrame {
 		public void paint(Graphics g) {
 			super.paint(g);
 			
-			Rectangle clipBounds = g.getClipBounds();
-			int width = clipBounds.width;
-			int height = clipBounds.height;
-			
-			
+			map.draw(g, g.getClipBounds().width/16);
 		}
+	}
+	
+	public boolean exists() {
+		return !disposed;
 	}
 }
