@@ -1,6 +1,5 @@
 INDEX VERSION 1.127+C:\Users\Jonathan\OneDrive\Jonathan\Programmieren\Java\Pacman\eclipse\.metadata\.plugins\org.eclipse.jdt.core
 3974580528.index
-1857363088.index
 30765161.index
 1498219845.index
 305854171.index

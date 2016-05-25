@@ -68,7 +68,7 @@ public class GameWindow extends JFrame {
 		map.addWall(0, 0);
 		map.addWall(15, 11);
 		map.addWall(15, 0);
-		map.addWall(0, 11);
+		//map.addWall(0, 11);
 		
 		
 		this.setVisible(true);
