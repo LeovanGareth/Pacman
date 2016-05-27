@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  * 
@@ -18,9 +19,15 @@ public class Main {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		
 		GameWindow w = new GameWindow();
+		GameMap map = new GameMap();
+		Player p = new Player();
+		
+		map.addWall(0, 0);
 		
 		while(w.exists()) {
-			w.revalidate();
+			w.update(map);
+			w.repaint();
+			p.update(map);
 		}
 	}
 

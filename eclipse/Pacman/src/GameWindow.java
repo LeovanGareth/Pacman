@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  */
 public class GameWindow extends JFrame {
 	private static final long serialVersionUID = -5710795868465552255L;
-	boolean disposed = true;
+	boolean disposed = false;
 	GameMap map = new GameMap();
 
 	/**
@@ -37,7 +37,7 @@ public class GameWindow extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent we) {
-	            disposed = false;
+	            disposed = true;
 	         }
 		});
 		
@@ -65,13 +65,15 @@ public class GameWindow extends JFrame {
 		setContentPane(new GameScreen());
 		
 		
-		map.addWall(0, 0);
-		map.addWall(15, 11);
-		map.addWall(15, 0);
-		map.addWall(0, 11);
-		
-		
 		this.setVisible(true);
+	}
+	
+	/**
+	 * Update Member Variablen für Spiel(GameMap, Player, ...)
+	 * @param map neue Map
+	 */
+	public void update(GameMap map) {
+		this.map = map;
 	}
 	
 	/**
