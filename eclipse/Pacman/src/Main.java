@@ -26,29 +26,18 @@ public class Main {
     Player p = new Player();
     KeyListener keys = new KeyListener();
     w.addKeyListener(keys);
+    GameState state = GameState.GAME;
     
-    w.update(map,p);
-    p.update(map);
+    map.addWall(0, 0);
     
-    p.moveRight();
     while(w.exists()) {
-        
-      if(keys.isPressed(KeyEvent.VK_UP)) {
-        p.moveUp();
+      if(keys.isPressed(KeyEvent.VK_ESCAPE)) {
+        map.addWall(5, 5);
+      } else {
+        map.removeWall(5, 5);
       }
       
-      if(keys.isPressed(KeyEvent.VK_DOWN)) {
-        p.moveDown();
-      }
-      
-      if(keys.isPressed(KeyEvent.VK_RIGHT)) {
-        p.moveRight();
-      }
-      
-      if(keys.isPressed(KeyEvent.VK_LEFT)) {
-        p.moveLeft();
-      }
-      w.update(map,p);
+      w.update(map, state);
       w.repaint();
       p.update(map);
     }
