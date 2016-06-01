@@ -18,18 +18,19 @@ public class GameWindow extends JFrame {
   private static final long serialVersionUID = -5710795868465552255L;
   boolean disposed = false;
   GameMap map = new GameMap();
-  Player p = new Player();
+  GameState state = GameState.GAME;
+  
   /**
-   * @throws HeadlessException
-   */
+  * @throws HeadlessException
+  */
   public GameWindow() {
     this("Game Window");
   }
-
+  
   /**
-   * @param title
-   * @throws HeadlessException
-   */
+  * @param title
+  * @throws HeadlessException
+  */
   public GameWindow(String title){
     super(title);
     
@@ -37,8 +38,8 @@ public class GameWindow extends JFrame {
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.addWindowListener(new WindowAdapter() {
       public void windowClosed(WindowEvent we) {
-              disposed = true;
-           }
+        disposed = true;
+      }
     });
     
     
@@ -69,26 +70,40 @@ public class GameWindow extends JFrame {
   }
   
   /**
-   * Update Member Variablen für Spiel(GameMap, Player, ...)
-   * @param map neue Map
-   */
-  public void update(GameMap map, Player p) {
+  * Update Member Variablen für Spiel(GameMap, Player, ...)
+  * @param map neue Map
+  */
+  public void update(GameMap map, GameState state) {
     this.map = map;
-    this.p = p;
+    this.state = state;
   }
   
   /**
-   * Class to paint Window Content
-   */
+  * Class to paint Window Content
+  */
   private class GameScreen extends JPanel {
     private static final long serialVersionUID = 6290571875202113600L;
-
+    
     @Override
     public void paint(Graphics g) {
       super.paint(g);
       
-      map.draw(g, g.getClipBounds().width/16);
-      p.draw(g);
+      switch (state) {
+        case GAME: 
+        map.draw(g, g.getClipBounds().width/16);
+        break;
+        case CHARACTER_SELECT: 
+        
+        break;
+        case GAME_OVER:
+        
+        break;
+        case GAME_MENU:
+        
+        break;
+        default: 
+        
+      } // end of switch
     }
   }
   
