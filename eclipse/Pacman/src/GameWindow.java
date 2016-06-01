@@ -15,82 +15,84 @@ import javax.swing.JPanel;
  *
  */
 public class GameWindow extends JFrame {
-	private static final long serialVersionUID = -5710795868465552255L;
-	boolean disposed = false;
-	GameMap map = new GameMap();
+  private static final long serialVersionUID = -5710795868465552255L;
+  boolean disposed = false;
+  GameMap map = new GameMap();
+  Player p = new Player();
+  /**
+   * @throws HeadlessException
+   */
+  public GameWindow() {
+    this("Game Window");
+  }
 
-	/**
-	 * @throws HeadlessException
-	 */
-	public GameWindow() {
-		this("Game Window");
-	}
+  /**
+   * @param title
+   * @throws HeadlessException
+   */
+  public GameWindow(String title){
+    super(title);
+    
+    
+    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    this.addWindowListener(new WindowAdapter() {
+      public void windowClosed(WindowEvent we) {
+              disposed = true;
+           }
+    });
+    
+    
+    Dimension screenSize = getToolkit().getScreenSize();
+    int width = screenSize.width;
+    int height = screenSize.height;
+    if((double)width/(double)height >= 8.0d/6.0d) {
+      width = 8*screenSize.height/9;
+      height = 2*screenSize.height/3;
+    } else {
+      height = 3*screenSize.width/8;
+      width = screenSize.width/2;
+    }
+    
+    int heightDif = -(height % 12);
+    int widthDif = (height + heightDif)*16/12 - width;
+    this.getContentPane().setPreferredSize(new Dimension(width+widthDif, height+heightDif));
+    this.pack();
+    
+    this.setResizable(false);
+    this.setLocationRelativeTo(null);
+    
+    
+    setContentPane(new GameScreen());
+    
+    
+    this.setVisible(true);
+  }
+  
+  /**
+   * Update Member Variablen für Spiel(GameMap, Player, ...)
+   * @param map neue Map
+   */
+  public void update(GameMap map, Player p) {
+    this.map = map;
+    this.p = p;
+  }
+  
+  /**
+   * Class to paint Window Content
+   */
+  private class GameScreen extends JPanel {
+    private static final long serialVersionUID = 6290571875202113600L;
 
-	/**
-	 * @param title
-	 * @throws HeadlessException
-	 */
-	public GameWindow(String title){
-		super(title);
-		
-		
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosed(WindowEvent we) {
-	            disposed = true;
-	         }
-		});
-		
-		
-		Dimension screenSize = getToolkit().getScreenSize();
-		int width = screenSize.width;
-		int height = screenSize.height;
-		if((double)width/(double)height >= 8.0d/6.0d) {
-			width = 8*screenSize.height/9;
-			height = 2*screenSize.height/3;
-		} else {
-			height = 3*screenSize.width/8;
-			width = screenSize.width/2;
-		}
-		
-		int heightDif = -(height % 12);
-		int widthDif = (height + heightDif)*16/12 - width;
-		this.getContentPane().setPreferredSize(new Dimension(width+widthDif, height+heightDif));
-		this.pack();
-		
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		
-		
-		setContentPane(new GameScreen());
-		
-		
-		this.setVisible(true);
-	}
-	
-	/**
-	 * Update Member Variablen für Spiel(GameMap, Player, ...)
-	 * @param map neue Map
-	 */
-	public void update(GameMap map) {
-		this.map = map;
-	}
-	
-	/**
-	 * Class to paint Window Content
-	 */
-	private class GameScreen extends JPanel {
-		private static final long serialVersionUID = 6290571875202113600L;
-
-		@Override
-		public void paint(Graphics g) {
-			super.paint(g);
-			
-			map.draw(g, g.getClipBounds().width/16);
-		}
-	}
-	
-	public boolean exists() {
-		return !disposed;
-	}
+    @Override
+    public void paint(Graphics g) {
+      super.paint(g);
+      
+      map.draw(g, g.getClipBounds().width/16);
+      p.draw(g);
+    }
+  }
+  
+  public boolean exists() {
+    return !disposed;
+  }
 }
